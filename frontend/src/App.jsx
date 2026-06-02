@@ -9,6 +9,7 @@ import MonthCompare from "./components/MonthCompare";
 
 function App() {
   const [isLanding, setIsLanding] = useState(true);
+  const [showHelp, setShowHelp]   = useState(false);
   const [expenses, setExpenses]     = useState([]);
   const [editTarget, setEditTarget] = useState(null);
   const [loading, setLoading]       = useState(false);
@@ -124,10 +125,47 @@ function App() {
 
       {/* Main content */}
       <main className="main-content">
-        <div className="page-header">
-          <h2>{pageInfo[activeTab].title}</h2>
-          <p>{pageInfo[activeTab].sub}</p>
+        <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative" }}>
+          <div>
+            <h2>{pageInfo[activeTab].title}</h2>
+            <p>{pageInfo[activeTab].sub}</p>
+          </div>
+          <button
+            onClick={() => setShowHelp(prev => !prev)}
+            style={helpStyles.infoBtn(showHelp)}
+            title="Help & Info"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </button>
         </div>
+
+        {showHelp && (
+          <div style={helpStyles.accordionCard}>
+            <div style={helpStyles.accordionHeader}>
+              <h4 style={helpStyles.accordionTitle}>Help & Quick Guide</h4>
+              <button onClick={() => setShowHelp(false)} style={helpStyles.closeBtn}>&times;</button>
+            </div>
+            <div style={helpStyles.accordionBody}>
+              <p style={{ margin: "0 0 0.75rem", fontSize: 13, color: "#71717a" }}>
+                <strong>Overview:</strong> {helpContent[activeTab].description}
+              </p>
+              <h5 style={helpStyles.subHeading}>How to Use:</h5>
+              <ul style={helpStyles.list}>
+                {helpContent[activeTab].steps.map((step, idx) => (
+                  <li key={idx} style={helpStyles.listItem}>{step}</li>
+                ))}
+              </ul>
+              <div style={helpStyles.tipBox}>
+                <span style={{ fontWeight: 700, marginRight: 6 }}>💡 Pro Tip:</span>
+                {helpContent[activeTab].tip}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="page-body">
 
@@ -367,6 +405,117 @@ const landingStyles = {
     fontSize: "12px",
     color: "#52525b",
     zIndex: 2
+  }
+};
+
+const helpContent = {
+  home: {
+    description: "Your primary financial ledger. Post, edit, filter, and track individual transaction records.",
+    steps: [
+      "Use 'Post Transaction' to log a merchant name, value, category, date, and note.",
+      "Filter the ledger view by writing a keyword or selecting category/date ranges in the filter bar.",
+      "Review the category Pie Chart at the bottom to visualize your spending breakdown."
+    ],
+    tip: "You can click the 'Edit' button next to any transaction to instantly load its contents into the form for correction."
+  },
+  insights: {
+    description: "Advanced analytics suite featuring transaction stats, trend timelines, and target budget tracking.",
+    steps: [
+      "Establish a Monthly Budget Limit to activate the visual tracker.",
+      "Switch between Day, Week, and Month views to trace short-term vs long-term spending patterns.",
+      "Review the Budget Alerts and Finance Coach suggestions to maintain healthy cash flow habits."
+    ],
+    tip: "Set your budget goal to reflect realistic targets; our coach recommends keeping individual categories below 40% of total spend."
+  },
+  compare: {
+    description: "Period comparison dashboard. Track variance and category budget deviations between any two months.",
+    steps: [
+      "Select Month A and Month B using the date inputs at the top.",
+      "Review the total variance indicators to check if your outflows increased or decreased.",
+      "Analyze the Category Outflow Comparison bar chart to trace which areas diverged the most."
+    ],
+    tip: "Emerald columns represent Month A spend, while Zinc columns represent Month B spend, making differences visible at a glance."
+  }
+};
+
+const helpStyles = {
+  infoBtn: (active) => ({
+    background: active ? "rgba(16, 185, 129, 0.1)" : "#ffffff",
+    border: `1px solid ${active ? "#10b981" : "#e4e4e7"}`,
+    color: active ? "#10b981" : "#71717a",
+    width: "36px",
+    height: "36px",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    transition: "all 0.15s ease",
+    boxShadow: "0 1px 2px rgba(0,0,0,0.05)"
+  }),
+  accordionCard: {
+    background: "#fafafa",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    borderLeft: "4px solid #10b981",
+    padding: "1.25rem",
+    marginBottom: "1.5rem",
+    animation: "fadeIn 0.2s ease-out"
+  },
+  accordionHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "0.75rem",
+    borderBottom: "1px solid #f0f2f5",
+    paddingBottom: "0.5rem"
+  },
+  accordionTitle: {
+    fontSize: "14px",
+    fontWeight: 700,
+    color: "#09090b",
+    margin: 0
+  },
+  closeBtn: {
+    background: "none",
+    border: "none",
+    fontSize: "20px",
+    color: "#a1a1aa",
+    cursor: "pointer",
+    lineHeight: 1
+  },
+  accordionBody: {
+    fontSize: "13px",
+    color: "#27272a"
+  },
+  subHeading: {
+    fontSize: "12px",
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: "0.03em",
+    color: "#71717a",
+    margin: "0.75rem 0 0.4rem"
+  },
+  list: {
+    paddingLeft: "1.25rem",
+    margin: "0 0 0.75rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.3rem"
+  },
+  listItem: {
+    fontSize: "13px",
+    color: "#374151"
+  },
+  tipBox: {
+    background: "#ffffff",
+    border: "1px solid #e4e4e7",
+    borderRadius: "6px",
+    padding: "0.65rem 0.75rem",
+    fontSize: "12px",
+    color: "#18181b",
+    display: "flex",
+    alignItems: "center"
   }
 };
 
