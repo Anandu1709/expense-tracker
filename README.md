@@ -9,10 +9,10 @@ Designed with a high-contrast minimalist interface featuring a **Matte Black (`#
 ## 📷 Visual Preview
 
 ### 1. Landing Portal
-![Landing Portal](docs/images/1.png)
+![Landing Portal](docs/images/2.png)
 
 ### 2. Activity Ledger
-![Activity Ledger](docs/images/2.png)
+![Activity Ledger](docs/images/1.png)
 
 ### 3. Analytics & Budget Tracker
 ![Analytics & Budget Tracker](docs/images/3.png)
