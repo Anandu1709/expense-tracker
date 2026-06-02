@@ -10,14 +10,14 @@ export default function ExpenseList({ expenses, onEdit, onDelete }) {
     return (
       <div style={styles.empty}>
         <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.3 }}>¤</div>
-        <p style={{ fontWeight: 500, marginBottom: 4 }}>No expenses found</p>
-        <p style={{ fontSize: 13, color: "#9ca3af" }}>Add your first expense using the form above</p>
+        <p style={{ fontWeight: 500, marginBottom: 4 }}>No Transactions Recorded</p>
+        <p style={{ fontSize: 13, color: "#9ca3af" }}>This ledger is currently empty. Post a transaction above to generate data.</p>
       </div>
     );
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this expense?")) return;
+    if (!window.confirm("Are you sure you want to permanently remove this transaction from the database?")) return;
     await delExpense(id);
     onDelete();
   };
@@ -28,10 +28,10 @@ export default function ExpenseList({ expenses, onEdit, onDelete }) {
         <thead>
           <tr>
             <th style={styles.th}>Date</th>
-            <th style={styles.th}>Title</th>
+            <th style={styles.th}>Merchant / Description</th>
             <th style={styles.th}>Category</th>
-            <th style={{ ...styles.th, textAlign: "right" }}>Amount</th>
-            <th style={styles.th}>Note</th>
+            <th style={{ ...styles.th, textAlign: "right" }}>Value</th>
+            <th style={styles.th}>Memo</th>
             <th style={{ ...styles.th, textAlign: "center" }}>Actions</th>
           </tr>
         </thead>
@@ -89,8 +89,8 @@ const styles = {
   badge: { padding: "3px 10px", borderRadius: 6, fontSize: 12, fontWeight: 600 },
   editBtn: {
     marginRight: 6, padding: "4px 12px", fontSize: 12,
-    background: "#eff6ff", color: "#2563eb",
-    border: "1px solid #bfdbfe", borderRadius: 6, cursor: "pointer", fontWeight: 500
+    background: "#fafafa", color: "#09090b",
+    border: "1px solid #e4e4e7", borderRadius: 6, cursor: "pointer", fontWeight: 500
   },
   deleteBtn: {
     padding: "4px 12px", fontSize: 12,

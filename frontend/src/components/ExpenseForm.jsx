@@ -50,18 +50,18 @@ export default function ExpenseForm({ editTarget, onSave }) {
 
       <div style={styles.grid}>
         <div style={styles.field}>
-          <label>Title <span style={styles.req}>*</span></label>
+          <label>Merchant / Description <span style={styles.req}>*</span></label>
           <input
             value={form.title}
             onChange={set("title")}
-            placeholder="e.g. Coffee at Starbucks"
+            placeholder="e.g. Amazon Web Services, Uber"
             style={styles.input}
             maxLength={100}
           />
         </div>
 
         <div style={styles.field}>
-          <label>Amount (₹) <span style={styles.req}>*</span></label>
+          <label>Value (INR) <span style={styles.req}>*</span></label>
           <input
             type="number"
             value={form.amount}
@@ -81,7 +81,7 @@ export default function ExpenseForm({ editTarget, onSave }) {
         </div>
 
         <div style={styles.field}>
-          <label>Date <span style={styles.req}>*</span></label>
+          <label>Transaction Date <span style={styles.req}>*</span></label>
           <input
             type="date"
             value={form.date}
@@ -92,11 +92,11 @@ export default function ExpenseForm({ editTarget, onSave }) {
       </div>
 
       <div style={{ ...styles.field, marginTop: "1rem" }}>
-        <label>Note <span style={{ color: "#9ca3af", fontWeight: 400 }}>(optional)</span></label>
+        <label>Memo / Reference <span style={{ color: "#9ca3af", fontWeight: 400 }}>(optional)</span></label>
         <textarea
           value={form.note}
           onChange={set("note")}
-          placeholder="Any extra details..."
+          placeholder="Add accounting notes, receipt reference, or comments..."
           rows={2}
           style={{ ...styles.input, resize: "vertical" }}
         />
@@ -104,11 +104,11 @@ export default function ExpenseForm({ editTarget, onSave }) {
 
       <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.25rem" }}>
         <button onClick={handleSubmit} style={styles.btnPrimary}>
-          {editTarget ? "Save Changes" : "Add Expense"}
+          {editTarget ? "Update Record" : "Post Transaction"}
         </button>
         {editTarget && (
           <button onClick={onSave} style={styles.btnSecondary}>
-            Cancel
+            Abort
           </button>
         )}
       </div>
@@ -134,7 +134,7 @@ const styles = {
     fontSize: 13, fontWeight: 500, border: "1px solid #fecaca"
   },
   btnPrimary: {
-    padding: "0.6rem 1.6rem", background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+    padding: "0.6rem 1.6rem", background: "#09090b",
     color: "#fff", border: "none", borderRadius: 8, cursor: "pointer",
     fontWeight: 600, fontSize: 14
   },

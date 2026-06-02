@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
 import { getCompare } from "../api";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  Legend,
+  ResponsiveContainer
+} from "recharts";
 
 const thisMonth = () => new Date().toISOString().slice(0, 7);
 const lastMonth = () => {
@@ -53,26 +63,26 @@ export default function MonthCompare({ expenses }) {
       {/* Month pickers */}
       <div style={styles.pickerRow}>
         <div style={styles.pickerField}>
-          <label style={styles.pickerLabel}>Month A</label>
+          <label style={styles.pickerLabel}>Period A</label>
           <input type="month" value={monthA} onChange={e => setMonthA(e.target.value)} style={styles.monthInput} />
         </div>
         <span style={{ color: "#9ca3af", fontWeight: 600, fontSize: 14, alignSelf: "flex-end", paddingBottom: 8 }}>vs</span>
         <div style={styles.pickerField}>
-          <label style={styles.pickerLabel}>Month B</label>
+          <label style={styles.pickerLabel}>Period B</label>
           <input type="month" value={monthB} onChange={e => setMonthB(e.target.value)} style={styles.monthInput} />
         </div>
       </div>
 
       {/* Total comparison cards */}
       <div style={styles.grid}>
-        <div style={{ ...styles.card, borderLeft: "4px solid #2563eb" }}>
+        <div style={{ ...styles.card, borderLeft: "4px solid #09090b" }}>
           <p style={styles.cardLabel}>{a.month}</p>
           <p style={styles.cardAmount}>₹{a.total.toFixed(2)}</p>
         </div>
 
         <div style={styles.middle}>
           {noData ? (
-            <p style={{ fontSize: 12, color: "#9ca3af" }}>No data to compare</p>
+            <p style={{ fontSize: 12, color: "#9ca3af" }}>No comparative data</p>
           ) : (
             <>
               <span style={{ ...styles.arrow, color }}>{arrow}</span>
@@ -88,11 +98,23 @@ export default function MonthCompare({ expenses }) {
         </div>
       </div>
 
-      {/* Bar comparison */}
-      {(a.total > 0 || b.total > 0) && (
+      {/* Category comparison side-by-side Bar Chart */}
+      {catRows.length > 0 && (
         <div style={styles.bars}>
-          <CompareBar label={a.month} amount={a.total} max={Math.max(a.total, b.total)} color="#2563eb" />
-          <CompareBar label={b.month} amount={b.total} max={Math.max(a.total, b.total)} color="#94a3b8" />
+          <h3 style={styles.chartTitle}>Category Outflow Comparison</h3>
+          <div style={{ width: "100%", height: 280 }}>
+            <ResponsiveContainer>
+              <BarChart data={catRows}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                <XAxis dataKey="category" stroke="#71717a" fontSize={11} tickLine={false} />
+                <YAxis stroke="#71717a" fontSize={11} tickLine={false} />
+                <RechartsTooltip formatter={(val) => `₹${val.toFixed(2)}`} />
+                <Legend />
+                <Bar name={a.month} dataKey="a" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar name={b.month} dataKey="b" fill="#a1a1aa" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       )}
 
@@ -106,7 +128,7 @@ export default function MonthCompare({ expenses }) {
                 <th style={styles.th}>Category</th>
                 <th style={{ ...styles.th, textAlign: "right" }}>{a.month}</th>
                 <th style={{ ...styles.th, textAlign: "right" }}>{b.month}</th>
-                <th style={{ ...styles.th, textAlign: "right" }}>Difference</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Variance</th>
               </tr>
             </thead>
             <tbody>
@@ -131,20 +153,7 @@ export default function MonthCompare({ expenses }) {
   );
 }
 
-function CompareBar({ label, amount, max, color }) {
-  const pct = max > 0 ? (amount / max) * 100 : 0;
-  return (
-    <div style={{ marginBottom: "0.6rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 4 }}>
-        <span style={{ color: "#4b5563", fontWeight: 600 }}>{label}</span>
-        <span style={{ fontWeight: 700 }}>₹{amount.toFixed(2)}</span>
-      </div>
-      <div style={barStyles.track}>
-        <div style={{ ...barStyles.fill, width: `${pct}%`, background: color, transition: "width 0.6s ease" }} />
-      </div>
-    </div>
-  );
-}
+
 
 const styles = {
   pickerRow: {
@@ -174,7 +183,17 @@ const styles = {
   arrow: { fontSize: 36, fontWeight: 800, lineHeight: 1 },
   pct: { fontSize: 20, fontWeight: 800, margin: "0.1rem 0 0" },
   changeLabel: { fontSize: 12, fontWeight: 600, margin: 0 },
-  bars: { background: "#fafafa", borderRadius: 10, padding: "1rem 1.25rem" },
+  bars: { background: "#fafafa", borderRadius: 10, padding: "1.25rem", border: "1px solid #e5e7eb" },
+  chartTitle: {
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    textTransform: "uppercase",
+    letterSpacing: "0.05em",
+    color: "#6b7280",
+    marginBottom: "1.25rem",
+    borderBottom: "2px solid #f0f2f5",
+    paddingBottom: "0.5rem"
+  },
   sectionLabel: {
     fontSize: 11, fontWeight: 600, textTransform: "uppercase",
     letterSpacing: "0.05em", color: "#6b7280", marginBottom: "0.75rem"
@@ -186,9 +205,4 @@ const styles = {
     letterSpacing: "0.04em", borderBottom: "2px solid #f0f2f5", background: "#fafafa"
   },
   td: { padding: "0.65rem 0.75rem", fontSize: 14, borderBottom: "1px solid #f3f4f6" },
-};
-
-const barStyles = {
-  track: { background: "#e2e8f0", borderRadius: 4, height: 10, overflow: "hidden" },
-  fill: { height: "100%", borderRadius: 4 },
 };

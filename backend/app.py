@@ -122,6 +122,74 @@ def insights():
     from collections import Counter
     freq_cat = Counter(r["category"] for r in rows).most_common(1)[0][0]
 
+    category_breakdown = [
+        {
+            "name": cat,
+            "amount": round(amount, 2)
+        }
+        for cat, amount in by_cat.items()
+    ]
+
+    daily_map = defaultdict(float)
+    for r in rows:
+        day = r["date"][-2:]
+        daily_map[day] += r["amount"]
+
+    daily_spending = [
+        {
+            "day": day,
+            "amount": round(amount, 2)
+        }
+        for day, amount in sorted(daily_map.items())
+    ]
+
+    # Weekly trend: W1 (days 1-7), W2 (days 8-14), W3 (days 15-21), W4 (days 22+)
+    weekly_map = {"W1": 0.0, "W2": 0.0, "W3": 0.0, "W4": 0.0}
+    for r in rows:
+        try:
+            day_val = int(r["date"][-2:])
+        except Exception:
+            day_val = 1
+        if day_val <= 7:
+            weekly_map["W1"] += r["amount"]
+        elif day_val <= 14:
+            weekly_map["W2"] += r["amount"]
+        elif day_val <= 21:
+            weekly_map["W3"] += r["amount"]
+        else:
+            weekly_map["W4"] += r["amount"]
+
+    weekly_spending = [
+        {"week": k, "amount": round(v, 2)}
+        for k, v in sorted(weekly_map.items())
+    ]
+
+    # Monthly trend: past 6 months leading to selected month
+    from datetime import datetime
+    try:
+        sel_date = datetime.strptime(month + "-01", "%Y-%m-%d").date()
+    except Exception:
+        sel_date = date.today().replace(day=1)
+
+    monthly_spending = []
+    for i in range(5, -1, -1):
+        m_offset = sel_date.month - i
+        y_offset = sel_date.year
+        while m_offset <= 0:
+            m_offset += 12
+            y_offset -= 1
+        m_str = f"{y_offset:04d}-{m_offset:02d}"
+
+        m_row = db.execute(
+            "SELECT SUM(amount) as total FROM expenses WHERE strftime('%Y-%m', date) = ?", (m_str,)
+        ).fetchone()
+
+        # Format month label as YYYY-MM
+        monthly_spending.append({
+            "month": m_str,
+            "amount": round(m_row["total"] or 0, 2)
+        })
+
     return jsonify({
         "empty":         False,
         "total":         round(total, 2),
@@ -130,6 +198,10 @@ def insights():
         "top_expense":   { "title": top_expense["title"], "amount": top_expense["amount"] },
         "top_category":  { "name": top_cat, "amount": round(top_cat_amt, 2), "pct": round(top_cat_pct, 1) },
         "freq_category": freq_cat,
+        "category_breakdown": category_breakdown,
+        "daily_spending": daily_spending,
+        "weekly_spending": weekly_spending,
+        "monthly_spending": monthly_spending
     })
 
 @app.route("/compare", methods=["GET"])

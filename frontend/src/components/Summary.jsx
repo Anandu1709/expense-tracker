@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getSummary } from "../api";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#f97316","#3b82f6","#a855f7","#ef4444","#10b981","#6b7280"];
+const COLORS = ["#09090b", "#10b981", "#3f3f46", "#059669", "#71717a", "#a1a1aa"];
 
 const thisMonth = () => new Date().toISOString().slice(0, 7);
 
@@ -44,14 +44,14 @@ export default function Summary({ expenses }) {
       {!loading && data && (
         <>
           <div style={styles.totalCard}>
-            <span style={{ fontSize: 13, color: "#6b7280", fontWeight: 500 }}>Total spent</span>
+            <span style={{ fontSize: 13, color: "#6b7280", fontWeight: 500 }}>Aggregate Period Outflow</span>
             <span style={styles.totalAmount}>₹{parseFloat(data.total).toFixed(2)}</span>
           </div>
 
           {chartData.length === 0 ? (
             <div style={styles.empty}>
-              <p style={{ fontWeight: 500, color: "#6b7280" }}>No expenses recorded for this month</p>
-              <p style={{ fontSize: 13, color: "#9ca3af", marginTop: 4 }}>Add expenses to see your spending breakdown</p>
+              <p style={{ fontWeight: 500, color: "#6b7280" }}>No Period Transactions Recorded</p>
+              <p style={{ fontSize: 13, color: "#9ca3af", marginTop: 4 }}>Post transactions above to view the summary breakdown.</p>
             </div>
           ) : (
             <div style={styles.content}>
@@ -87,8 +87,8 @@ export default function Summary({ expenses }) {
                 <thead>
                   <tr>
                     <th style={styles.th}>Category</th>
-                    <th style={{ ...styles.th, textAlign: "right" }}>Amount</th>
-                    <th style={{ ...styles.th, textAlign: "right" }}>Share</th>
+                    <th style={{ ...styles.th, textAlign: "right" }}>Value</th>
+                    <th style={{ ...styles.th, textAlign: "right" }}>Share %</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -133,12 +133,12 @@ const styles = {
   },
   totalCard: {
     display: "flex", flexDirection: "column", gap: 4,
-    background: "linear-gradient(135deg, #eff6ff, #f0f9ff)",
-    border: "1px solid #bfdbfe",
+    background: "#fafafa",
+    border: "1px solid #e4e4e7",
     borderRadius: 10, padding: "1rem 1.25rem", marginBottom: "1.5rem"
   },
   totalAmount: {
-    fontSize: 28, fontWeight: 700, color: "#1e40af",
+    fontSize: 28, fontWeight: 700, color: "#10b981",
     letterSpacing: "-0.02em"
   },
   empty: { textAlign: "center", padding: "2.5rem 1rem" },

@@ -35,15 +35,15 @@ function App() {
   const activeFilterCount = Object.values(filters).filter(v => v).length;
 
   const tabs = [
-    { id: "home",     label: "Home",     icon: <HomeIcon /> },
-    { id: "insights", label: "Insights", icon: <InsightsIcon /> },
-    { id: "compare",  label: "Compare",  icon: <CompareIcon /> },
+    { id: "home",     label: "Activity",     icon: <HomeIcon /> },
+    { id: "insights", label: "Analytics",    icon: <InsightsIcon /> },
+    { id: "compare",  label: "Comparison",   icon: <CompareIcon /> },
   ];
 
   const pageInfo = {
-    home:     { title: "Dashboard",       sub: "Manage and track your daily expenses" },
-    insights: { title: "Smart Insights",  sub: "Spending analytics and patterns" },
-    compare:  { title: "Month Compare",   sub: "This month vs last month spending" },
+    home:     { title: "Activity Ledger",      sub: "Real-time overview of current period transactions" },
+    insights: { title: "Analytics Suite",      sub: "Advanced breakdown of category volumes and behaviors" },
+    compare:  { title: "Period Comparison",    sub: "Analyze changes in output and budget deviations across periods" },
   };
 
   return (
@@ -53,7 +53,7 @@ function App() {
       <aside className="sidebar">
         <div className="sidebar-brand">
           <h1>Expense Tracker</h1>
-          <p>Personal Finance</p>
+          <p>Platform Engine v1.0.0</p>
         </div>
 
         <nav className="sidebar-nav">
@@ -70,7 +70,7 @@ function App() {
         </nav>
 
         <div className="sidebar-footer">
-          Built with Flask + React
+          System Core v1.0.0
         </div>
       </aside>
 
@@ -87,11 +87,11 @@ function App() {
             <>
               <div className="section-card">
                 <div className="section-title">
-                  {editTarget ? "Edit Expense" : "New Expense"}
+                  {editTarget ? "Modify Entry" : "Post Transaction"}
                 </div>
                 <ExpenseForm
                   editTarget={editTarget}
-                  onSave={(msg) => { setEditTarget(null); loadExpenses(); showSnackbar(msg || "Expense saved successfully"); }}
+                  onSave={(msg) => { setEditTarget(null); loadExpenses(); showSnackbar(msg || "Transaction recorded"); }}
                 />
               </div>
 
@@ -99,7 +99,7 @@ function App() {
                 <div className="section-title">
                   Filters {activeFilterCount > 0 && (
                     <span style={{
-                      background: "#2563eb", color: "#fff", borderRadius: 10,
+                      background: "#10b981", color: "#fff", borderRadius: 10,
                       padding: "1px 8px", fontSize: 11, marginLeft: 8, fontWeight: 700,
                       letterSpacing: 0
                     }}>
@@ -112,13 +112,13 @@ function App() {
 
               <div className="section-card">
                 <div className="section-title">
-                  Expenses {expenses.length > 0 && (
+                  Transaction Ledger {expenses.length > 0 && (
                     <span style={{
                       background: "#e5e7eb", color: "#4b5563", borderRadius: 10,
                       padding: "1px 8px", fontSize: 11, marginLeft: 8, fontWeight: 600,
                       letterSpacing: 0
                     }}>
-                      {expenses.length} {expenses.length === 1 ? "item" : "items"}
+                      {expenses.length} {expenses.length === 1 ? "record" : "records"}
                     </span>
                   )}
                 </div>
@@ -128,7 +128,7 @@ function App() {
                   <ExpenseList
                     expenses={expenses}
                     onEdit={(exp) => { setEditTarget(exp); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                    onDelete={() => { loadExpenses(); showSnackbar("Expense deleted"); }}
+                    onDelete={() => { loadExpenses(); showSnackbar("Record removed"); }}
                   />
                 )}
               </div>
