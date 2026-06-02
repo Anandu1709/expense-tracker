@@ -6,6 +6,22 @@ Designed with a high-contrast minimalist interface featuring a **Matte Black (`#
 
 ---
 
+## 📷 Visual Preview
+
+### 1. Landing Portal
+![Landing Portal](docs/images/1.png)
+
+### 2. Activity Ledger
+![Activity Ledger](docs/images/2.png)
+
+### 3. Analytics & Budget Tracker
+![Analytics & Budget Tracker](docs/images/3.png)
+
+### 4. Period Comparison
+![Period Comparison](docs/images/4.png)
+
+---
+
 ## 🚀 Key Visual & Feature Upgrades
 
 * **Matte Black & Emerald Design System**: Refined UI featuring glassmorphism, responsive container borders, and high-fidelity typography.
