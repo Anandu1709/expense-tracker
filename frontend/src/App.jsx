@@ -8,6 +8,7 @@ import Insights from "./components/Insights";
 import MonthCompare from "./components/MonthCompare";
 
 function App() {
+  const [isLanding, setIsLanding] = useState(true);
   const [expenses, setExpenses]     = useState([]);
   const [editTarget, setEditTarget] = useState(null);
   const [loading, setLoading]       = useState(false);
@@ -45,6 +46,53 @@ function App() {
     insights: { title: "Analytics Suite",      sub: "Advanced breakdown of category volumes and behaviors" },
     compare:  { title: "Period Comparison",    sub: "Analyze changes in output and budget deviations across periods" },
   };
+
+  if (isLanding) {
+    return (
+      <div style={landingStyles.container}>
+        <div style={landingStyles.gridBackground} />
+        <div style={landingStyles.card}>
+          <div style={landingStyles.logo}>R</div>
+          <h1 style={landingStyles.title}>Raify Expense Tracker</h1>
+          <p style={landingStyles.subtitle}>
+            A premium, high-contrast personal finance ledger and analytics engine built for modern asset control.
+          </p>
+          <div style={landingStyles.featuresGrid}>
+            <div style={landingStyles.feature}>
+              <div style={landingStyles.featureIcon}>💳</div>
+              <div style={landingStyles.featureTitle}>Ledger Flow</div>
+              <p style={landingStyles.featureText}>Record and classify transactions in a real-time activity ledger.</p>
+            </div>
+            <div style={landingStyles.feature}>
+              <div style={landingStyles.featureIcon}>📊</div>
+              <div style={landingStyles.featureTitle}>Analytics Suite</div>
+              <p style={landingStyles.featureText}>Toggle day, week, or month trends with high-fidelity visuals.</p>
+            </div>
+            <div style={landingStyles.feature}>
+              <div style={landingStyles.featureIcon}>⚖️</div>
+              <div style={landingStyles.featureTitle}>Variance Compare</div>
+              <p style={landingStyles.featureText}>Compare two calendar periods and analyze budget deviations side-by-side.</p>
+            </div>
+            <div style={landingStyles.feature}>
+              <div style={landingStyles.featureIcon}>🎯</div>
+              <div style={landingStyles.featureTitle}>Budget Control</div>
+              <p style={landingStyles.featureText}>Set user-defined monthly limits with coaching recommendations.</p>
+            </div>
+          </div>
+          <button onClick={() => setIsLanding(false)} style={landingStyles.button}>
+            Enter Dashboard
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 8 }}>
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </button>
+        </div>
+        <div style={landingStyles.footer}>
+          System Core v1.0.0 • Matte Black & Emerald Design System
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app-layout">
@@ -203,5 +251,123 @@ function CompareIcon() {
     </svg>
   );
 }
+
+const landingStyles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "100vh",
+    background: "#09090b",
+    color: "#ffffff",
+    padding: "2rem",
+    position: "relative",
+    overflow: "hidden",
+    fontFamily: "'Inter', sans-serif"
+  },
+  gridBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: "radial-gradient(#1e293b 1px, transparent 1px)",
+    backgroundSize: "24px 24px",
+    opacity: 0.25,
+    zIndex: 1
+  },
+  card: {
+    width: "100%",
+    maxWidth: "800px",
+    textAlign: "center",
+    zIndex: 2,
+    background: "rgba(255, 255, 255, 0.02)",
+    border: "1px solid rgba(255, 255, 255, 0.08)",
+    borderRadius: "16px",
+    padding: "3rem 2rem",
+    backdropFilter: "blur(8px)",
+    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5)"
+  },
+  logo: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "56px",
+    height: "56px",
+    background: "#10b981",
+    color: "#09090b",
+    fontSize: "28px",
+    fontWeight: 800,
+    borderRadius: "12px",
+    marginBottom: "1.5rem",
+    boxShadow: "0 0 20px rgba(16, 185, 129, 0.3)"
+  },
+  title: {
+    fontSize: "2.5rem",
+    fontWeight: 800,
+    letterSpacing: "-0.03em",
+    marginBottom: "1rem",
+    color: "#ffffff"
+  },
+  subtitle: {
+    fontSize: "1.05rem",
+    color: "#a1a1aa",
+    maxWidth: "600px",
+    margin: "0 auto 2.5rem",
+    lineHeight: 1.5
+  },
+  featuresGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+    gap: "1.25rem",
+    marginBottom: "3rem",
+    textAlign: "left"
+  },
+  feature: {
+    background: "rgba(255, 255, 255, 0.02)",
+    border: "1px solid rgba(255, 255, 255, 0.05)",
+    borderRadius: "10px",
+    padding: "1.25rem",
+    transition: "border-color 0.15s ease"
+  },
+  featureIcon: {
+    fontSize: "20px",
+    marginBottom: "0.5rem"
+  },
+  featureTitle: {
+    fontSize: "14px",
+    fontWeight: 700,
+    color: "#ffffff",
+    marginBottom: "0.25rem"
+  },
+  featureText: {
+    fontSize: "12px",
+    color: "#71717a",
+    lineHeight: 1.4
+  },
+  button: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "0.8rem 2rem",
+    background: "#10b981",
+    color: "#09090b",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "15px",
+    fontWeight: 700,
+    cursor: "pointer",
+    boxShadow: "0 4px 14px rgba(16, 185, 129, 0.4)",
+    transition: "transform 0.15s ease, opacity 0.15s ease"
+  },
+  footer: {
+    position: "absolute",
+    bottom: "1.5rem",
+    fontSize: "12px",
+    color: "#52525b",
+    zIndex: 2
+  }
+};
 
 export default App;
