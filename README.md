@@ -1,74 +1,91 @@
-# Expense Tracker
+# Platform Ledger & Analytics Suite
 
-A personal expense tracking web app built with Flask + React + Vite.
+A premium, high-performance personal finance management engine and activity ledger built with **Flask**, **React**, and **Vite**.
 
-## How to run
+Designed with a high-contrast minimalist interface featuring a **Matte Black (`#09090b`)** design system and **Emerald Green (`#10b981`)** success highlights.
 
-### Backend
+---
+
+## 🚀 Key Visual & Feature Upgrades
+
+* **Matte Black & Emerald Design System**: Refined UI featuring glassmorphism, responsive container borders, and high-fidelity typography.
+* **Interactive Analytics Suite (Bar & Pie Charts)**:
+  - **Dynamic Spending Trends**: Integrates a responsive Recharts bar graph.
+  - **Granular Toggles**: Instantly switch trends between **Day** (daily transaction flow), **Week** (relative billing periods), and **Month** (6-month historical overview).
+  - **Narrative Intelligence**: Generates automated narrative sentences summarizing outliers, average tickets, and top outflow categories.
+* **Period Comparison Engine**:
+  - Compare transaction balances across any two selected calendar periods.
+  - Features a side-by-side **Category Outflow Variance Bar Chart** color-coded with Emerald Green (selected period) and Zinc Gray (comparative period).
+
+---
+
+## 🛠️ Technology Stack Choices
+
+| Layer | Technology | Why |
+| :--- | :--- | :--- |
+| **Backend API** | Flask + SQLite | Ultra-lightweight, zero-config relational SQL database. |
+| **Cross-Origin** | Flask-CORS | Securely connects the local React dev server. |
+| **Frontend UI** | React + Vite | Fast Hot Module Replacement (HMR) and modular architecture. |
+| **Visualization**| Recharts | Highly performant, declarative SVG-based chart library. |
+
+---
+
+## 🗄️ System Architecture & Directories
+
+```text
+expense-tracker/
+├── backend/
+│   ├── app.py              # Single-file Flask API service (8 routes)
+│   ├── expenses.db         # SQLite instance
+│   └── requirements.txt    # Flask backend dependencies
+└── frontend/
+    ├── src/
+    │   ├── App.jsx           # Activity Dashboard layout, view routing, & state coordination
+    │   ├── api.js            # Standard Fetch utility wrappers
+    │   ├── index.css         # Custom utility tokens & design system styles
+    │   └── components/
+    │       ├── ExpenseForm.jsx   # Dynamic transaction logger (Post/Edit actions)
+    │       ├── ExpenseList.jsx   # Transaction history tabular ledger
+    │       ├── FilterBar.jsx     # Parametric query selectors
+    │       ├── Summary.jsx       # Period spent summary + Pie Chart distribution
+    │       ├── Insights.jsx      # Analytics Suite, Bar Chart & smart summaries
+    │       └── MonthCompare.jsx  # Period Comparison & category variance charts
+```
+
+---
+
+## 🏁 Quickstart Setup Guide
+
+### 1. Launch the Backend API
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python app.py                   # runs on http://localhost:3000
-```
+# Windows shell activation:
+# venv\Scripts\activate
+# Unix/macOS shell activation:
+# source venv/bin/activate
 
-### Frontend (new terminal)
+pip install -r requirements.txt
+python app.py
+```
+*API engine starts automatically at `http://localhost:3000`.*
+
+### 2. Launch the Frontend Dev Server
 ```bash
 cd frontend
 npm install
-npm run dev                     # runs on http://localhost:5173
+npm run dev
 ```
+*Vite web application loads at `http://localhost:5173`.*
 
-Open http://localhost:5173 in your browser.
+---
 
-## Stack choices
+## 🔌 API Route Schema Reference
 
-| Layer | Choice | Why |
-|---|---|---|
-| Backend | Flask + SQLite | Minimal setup, stdlib DB, no extra process |
-| CORS | flask-cors | One line to unblock React dev server |
-| Frontend | React + Vite | Fast HMR, clean component model, no boilerplate |
-| Charts | Recharts | React-native, no CDN hacks, works with live data |
-
-## What's done
-
-- Add, edit, delete expenses (title, amount, category, date, note)
-- View all expenses sorted by date (most recent first)
-- Filter by category, date range, and title (partial match)
-- Monthly summary with total spend + category breakdown
-- Pie chart visualisation with percentage breakdown
-- Input validation on both frontend and backend
-- Edge cases: empty states, confirm on delete, invalid date range warning, amount > 0 enforced at DB level
-
-## What was skipped (and why)
-
-- **Authentication** — not required per spec
-- **Deployment** — demo runs locally, no infra needed
-- **Test suite** — prioritised working features within 2hr limit
-- **Pagination** — not needed at demo scale
-
-## Known rough edges
-
-- No optimistic UI updates — always re-fetches after mutation
-- Pie chart colours are fixed, not user-themed
-- No mobile responsive layout (works best on laptop)
-
-## Project structure
-
-```
-expense-tracker/
-  backend/
-    app.py              # Flask API — all 6 routes
-    expenses.db         # SQLite DB (auto-created)
-    requirements.txt    # flask, flask-cors
-  frontend/
-    src/
-      App.jsx           # Root state, layout
-      api.js            # All fetch calls
-      components/
-        ExpenseForm.jsx # Add + edit form
-        ExpenseList.jsx # Expense table
-        FilterBar.jsx   # Filters
-        Summary.jsx     # Monthly summary + pie chart
-```
+* `GET /expenses` — Lists transactions. Filters: `category`, `from`, `to`, `search`.
+* `POST /expenses` — Posts a new transaction. Requires: `title`, `amount`, `category`, `date`.
+* `PUT /expenses/<id>` — Updates a transaction record.
+* `DELETE /expenses/<id>` — Permanently deletes a transaction.
+* `GET /summary` — Aggregates period outflow and category distribution.
+* `GET /insights` — Generates transaction counts, peaks, daily/weekly/monthly spending arrays.
+* `GET /compare` — Aggregates two comparative periods for variance calculations.
